@@ -1,3 +1,12 @@
+
+function removeActiveClass(){
+    const activeClasses = document.getElementsByClassName('active')
+    
+    for(let btn of activeClasses){
+        btn.classList.remove('active')
+    }
+}
+
 // categories data api taka fetch
 function categoriesBtnDataLoad(){
     fetch('https://openapi.programming-hero.com/api/phero-tube/categories')
@@ -10,17 +19,53 @@ function categoriesBtnDataLoad(){
 function videoDataLoad(){
     fetch('https://openapi.programming-hero.com/api/phero-tube/videos')
     .then(res=>res.json())
-    .then(data=>videoDisplay(data.videos))
+    .then(data=>{
+        document.getElementById('btn-all').classList.add('active')
+        videoDisplay(data.videos)
+    })
 }
+
+const loadCategorieVidoes = (id) =>{
+
+    const url = `https://openapi.programming-hero.com/api/phero-tube/category/${id}`
+    
+    fetch(url)
+    .then(res=>res.json())
+    .then(data=>{
+        removeActiveClass()
+        const clickedButton = document.getElementById(`btn-${id}`)
+         clickedButton.classList.add('active')
+        videoDisplay(data.category)
+    })
+
+    
+}
+
 
 // video display
 const videoDisplay = (videos) => {
     
     const videosCardContainer = document.getElementById('card-container');
 
+    videosCardContainer.innerHTML='';
+
+    if(videos.length==0){
+         videosCardContainer.innerHTML=`
+         
+        <div  class=" col-span-full py-20">
+            <div class="flex justify-center items-center">
+                <img src="assets/Icon.png" alt="">
+            </div>
+            <div>
+                <h1 class="text-center font-bold text-3xl w-9/12 md:w-2/5 lg:w-1/5 mx-auto py-2">Oops!! Sorry, There is no content here</h1>
+            </div>
+        </div>
+         `
+        return;
+    }
+
     for(let i = 0; i<videos.length; i++){
         const video = videos[i];
-        console.log(video);
         const videoDiv = document.createElement('div')
         videoDiv.innerHTML=`
         
@@ -32,9 +77,9 @@ const videoDisplay = (videos) => {
                 alt="Shoes" />
                  <span class="absolute right-4 bottom-3 bg-black text-white rounded-md p-1 text-sm">3hrs 56 min ago</span>
             </figure>
-            <div class="flex gap-4 py-4 justify-center items-center">
+            <div class="flex gap-4 py-4  items-center">
                 <div>
-                    <div class="avatar p-2">
+                    <div class="avatar">
                         <div class="ring-primary ring-offset-base-100 w-12  rounded-full ring ring-offset-2">
                           <img  src="${video.authors[0].profile_picture}" />
                         </div>
@@ -57,15 +102,15 @@ const videoDisplay = (videos) => {
     
 }
 
-// data display
+// categories button display
 function displayCategoriesBtn(categories){
  
     const categoriesContainer = document.getElementById('categories-container');
 
-    for(const categorie of categories){
+    for(const category of categories){
         const btnDiv = document.createElement('div')
         btnDiv.innerHTML=`
-        <button class="btn btn-sm hover:bg-[#FF1F3D] hover:text-white">${categorie.category}</button>
+        <button id="btn-${category.category_id}" onclick="loadCategorieVidoes(${category.category_id})" class="btn btn-sm hover:bg-[#FF1F3D] hover:text-white">${category.category}</button>
         `
         categoriesContainer.append(btnDiv)
     }

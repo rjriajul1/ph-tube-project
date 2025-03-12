@@ -8,6 +8,13 @@
     <!-- tailwind and daisy CDN -->
     <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+    <style>
+        .active{
+            background-color: #FF1F3D;
+            color: white;
+        }
+    </style>
 </head>
 
 <body>
@@ -18,20 +25,32 @@
                  <img class="w-28" src="assets/Logo.png" alt="">
             </div>
             <div> 
-                <button class="btn border-none font-bold">Sort by view</button> 
+                <label class="input">
+                    <svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g stroke-linejoin="round" stroke-linecap="round" stroke-width="2.5" fill="none" stroke="currentColor"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></g></svg>
+                    <input type="search" required placeholder="Search"/>
+                  </label>
             </div>
     
             <div> 
-                <button class="btn bg-[#FF1F3D] text-white font-bold">Blogs</button> 
+                <button class="btn ">Sort by view</button> 
             </div>
 
         </nav>
     </header>
     <nav id="categories-container" class="py-5 flex gap-6 justify-center">
-        <button onclick="videoDataLoad()" class="btn btn-sm  bg-[#FF1F3D] text-white ">ALL</button>
+        <button id="btn-all" onclick="videoDataLoad()" class="btn btn-sm ">ALL</button>
     </nav>
 
-    <section id="card-container" class="w-11/12 mx-auto py-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+    <section id="card-container" class="w-11/12 mx-auto py-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+
+        <div  class=" col-span-full py-20">
+            <div class="flex justify-center items-center">
+                <img src="assets/Icon.png" alt="">
+            </div>
+            <div>
+                <h1 class="text-center font-bold text-3xl w-9/12 md:w-2/5 lg:w-1/5 mx-auto py-2">Oops!! Sorry, There is no content here</h1>
+            </div>
+        </div>
        
     </section>
 

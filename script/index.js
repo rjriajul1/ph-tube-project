@@ -16,8 +16,8 @@ function categoriesBtnDataLoad(){
 
 // video data api taka fetch
 
-function videoDataLoad(){
-    fetch('https://openapi.programming-hero.com/api/phero-tube/videos')
+function videoDataLoad(search =""){
+    fetch(`https://openapi.programming-hero.com/api/phero-tube/videos?title=${search}`)
     .then(res=>res.json())
     .then(data=>{
         document.getElementById('btn-all').classList.add('active')
@@ -41,6 +41,56 @@ const loadCategorieVidoes = (id) =>{
     
 }
 
+function loadVideoDetails(videoId){
+    
+    const url = `https://openapi.programming-hero.com/api/phero-tube/video/${videoId}`
+    fetch(url)
+    .then(res=>res.json())
+    .then(data=>{
+        
+        displayVideoDetails(data.video)
+       
+    })
+}
+
+const displayVideoDetails = (video)=>{
+       console.log(video);
+  document.getElementById('video_Details').showModal()
+
+  const detalisContainer = document.getElementById('details-container')
+  detalisContainer.innerHTML=`
+<div class="w-full h-max  bg-base-100  ">
+            <figure class="relative">
+              <img
+                class="w-full h-72 object-cover"
+                src="${video.thumbnail}"
+                alt="Shoes" />
+                 <span class="absolute right-4 bottom-3 bg-black text-white rounded-md p-1 text-sm">3hrs 56 min ago</span>
+            </figure>
+            <div class="flex gap-4 py-4  items-center">
+                <div>
+                    <div class="avatar">
+                        <div class="ring-primary ring-offset-base-100 w-12  rounded-full ring ring-offset-2">
+                          <img  src="${video.authors[0].profile_picture}" />
+                        </div>
+                      </div>
+                </div>
+                <div>
+                    <h2 class="font-bold">${video.title}</h2>
+                    <p class="text-gray-400 gap-2 flex">${video.authors[0].profile_name}
+                      ${video.authors[0].verified == true ? ` <img class="w-5 h-5 object-cover " src="    https://img.icons8.com/?size=48&id=98A4yZTt9abw&format=png" alt="">` : `not verified ` }
+                    </p>
+                    <span class="text-gray-400">${video.others.views} views</span>
+                </div>
+                
+            </div>
+           
+            
+          </div>
+        
+        `
+   
+}
 
 // video display
 const videoDisplay = (videos) => {
@@ -88,11 +138,14 @@ const videoDisplay = (videos) => {
                 <div>
                     <h2 class="font-bold">${video.title}</h2>
                     <p class="text-gray-400 gap-2 flex">${video.authors[0].profile_name}
-                       <img class="w-5 h-5 object-cover " src="    https://img.icons8.com/?size=48&id=98A4yZTt9abw&format=png" alt="">
+                       ${video.authors[0].verified == true ? ` <img class="w-5 h-5 object-cover " src="    https://img.icons8.com/?size=48&id=98A4yZTt9abw&format=png" alt="">` : `not verified ` }
                     </p>
                     <span class="text-gray-400">${video.others.views} views</span>
                 </div>
+                
             </div>
+            <button onclick="loadVideoDetails('${video.video_id}')"class="btn btn-block ">Show detalis</button>
+            
           </div>
         
         `
@@ -117,31 +170,30 @@ function displayCategoriesBtn(categories){
 
 }
 
-categoriesBtnDataLoad()
+categoriesBtnDataLoad();
 
+document.getElementById('search').addEventListener('keyup', (e)=>{
+    const input = e.target.value;
+    videoDataLoad(input)
+    
+})
 
 
 // {
 //     "category_id": "1001",
-//     "category": "Music"
-// }
-
-
-// {
-//     "category_id": "1001",
-//     "video_id": "aaah",
-//     "thumbnail": "https://i.ibb.co/hY496Db/coloer-of-the-wind.jpg",
-//     "title": "Colors of the Wind",
+//     "video_id": "aaaa",
+//     "thumbnail": "https://i.ibb.co/L1b6xSq/shape.jpg",
+//     "title": "Shape of You",
 //     "authors": [
 //         {
-//             "profile_picture": "https://i.ibb.co/6r4cx4P/ethen-clack.png",
-//             "profile_name": "Ethan Clark",
-//             "verified": true
+//             "profile_picture": "https://i.ibb.co/D9wWRM6/olivia.jpg",
+//             "profile_name": "Olivia Mitchell",
+//             "verified": ""
 //         }
 //     ],
 //     "others": {
-//         "views": "233K",
-//         "posted_date": "16090"
+//         "views": "100K",
+//         "posted_date": "16278"
 //     },
-//     "description": "Ethan Clark's 'Colors of the Wind' is a vibrant musical exploration that captivates listeners with its rich, expressive melodies and uplifting rhythm. With 233K views, this song is a celebration of nature's beauty and human connection, offering a soothing and enriching experience for fans of heartfelt, nature-inspired music."
-// }
+//     "description": "Dive into the rhythm of 'Shape of You,' a captivating track that blends pop sensibilities with vibrant beats. Created by Olivia Mitchell, this song has already gained 100K views since its release. With its infectious melody and heartfelt lyrics, 'Shape of You' is perfect for fans looking for an uplifting musical experience. Let the music take over as Olivia's vocal prowess and unique style create a memorable listening journey."
+// }<img class="w-5 h-5 object-cover " src="    https://img.icons8.com/?size=48&id=98A4yZTt9abw&format=png" alt="">
